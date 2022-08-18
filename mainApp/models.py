@@ -33,6 +33,6 @@ class Notice(models.Model):
 
 
 class Response(models.Model):
-
-
-class Category(models.Model):
+    responseText = models.TextField()
+    responseUser = models.ForeignKey(User,on_delete=models.CASCADE)
+    responseNotice = models.ForeignKey(Notice, on_delete=models.CASCADE)
