@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-sq=g^t0m3r$s(u!u6ed+mffj4+$ji)0h&qxs+7bd@=vy#p=5g9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'ckeditor',
+    'ckeditor_uploader',
 
     'mainApp',
 ]
@@ -132,3 +133,20 @@ STATICFILES_DIRS = [
 ]
 
 SITE_ID = 1
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+
+# django ckeditor
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'extraPlugins': 'youtube',
+        'width': 'auto',
+    },
+}
+
+STATIC_ROOT = 'static_root'
+
+
+LOGIN_URL = 'login/'
+LOGIN_REDIRECT_URL = '/'

@@ -1,0 +1,74 @@
+.navbar {
+    font-style: italic;
+}
+
+.col {
+    background: rgba(255, 255, 255, .7);
+    margin: 0 10px 0 10px;
+}
+
+.container {
+    background: rgba(255, 255, 255, .2);
+    opacity: 0.9;
+    margin: 0 0 0 0;
+    border: 0 0 0 0;
+    min-width: 100%;
+}
+
+div {
+    margin: 0 0 0 0;
+    border-radius: 5px;
+}
+
+.wrapper {
+    border: 0 0 0 0;
+}
+
+.container_navbar_name {
+    font-family: 'Rubik Dirt';
+    font-style: normal;
+    font-size: 200%;
+    color: black;
+    min-height: 6rem;
+}
+
+.cont_main_page {
+    font-size: 70%;
+    min-height: 6rem;
+}
+
+.cont_publication_create {
+    font-size: 70%;
+    min-height: 6rem;
+}
+
+.cont_enter {
+    font-size: 70%;
+    min-height: 6rem;
+}
+
+.navbar_name {
+    color: black;
+}
+
+.menu_link {
+    color: black;
+}
+
+@media (min-width: 576px) {
+    body {
+        background-image: url("../images/Morrowind2.jpg");     
+    }
+}
+
+@media (min-width: 768px) {
+    body {
+        background-image: url("../images/Morrowind_wallpaper.jpg");
+    }
+}
+
+@media (min-width: 1200px) {
+    body{
+        background-image: url("../images/Morrowind3.jpg");
+    }
+}

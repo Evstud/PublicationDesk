@@ -1,0 +1,17 @@
+{% extends 'default.html' %}
+
+{% block title %}
+Добавить объявление
+{% endblock title %}
+
+{% block content %}
+<form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      {{ form.media }}
+      <input type="submit" value="Добавить объявление">
+</form>
+<br>
+<br>
+
+{% endblock content %}
