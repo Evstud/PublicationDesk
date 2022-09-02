@@ -1,6 +1,8 @@
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Notice, Response
 from .forms import NoticeForm, ResponseForm
+
 
 
 class NoticeList(ListView):
@@ -20,13 +22,17 @@ class NoticeDetailView(DetailView):
     queryset = Notice.objects.all()
 
 
-class NoticeCreateView(CreateView):
+class NoticeCreateView(LoginRequiredMixin, CreateView):
     template_name = 'notice_create.html'
     form_class = NoticeForm
-    success_url = '/notices/'
+    success_url = ''
 
 
-class ResponseCreateView(CreateView):
+class ResponseCreateView(LoginRequiredMixin, CreateView):
     template_name = 'response_create.html'
     form_class = ResponseForm
-    success_url = '/notices/'
+    success_url = ''
+
+
+class IndexView(LoginRequiredMixin, TemplateView):
+    template_name = 'users_page.html'
