@@ -39,10 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+
     'ckeditor',
     'ckeditor_uploader',
-    'allauth',
-    'allauth.account',
 
     'mainApp',
 ]
@@ -153,11 +152,8 @@ STATIC_ROOT = 'static_root'
 LOGIN_URL = 'accounts/login'
 LOGIN_REDIRECT_URL = '/'
 
-# for allauth
-AUTHENTICATION_BACKENDS = [
-    # Needed to login by username in Django admin
-    'django.contrib.auth.backends.ModelBackend',
+# for django-registration
 
-    # 'allauth' specific authentication method, such as login by email
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
+ACCOUNT_ACTIVATION_DAYS = 1
+
+
