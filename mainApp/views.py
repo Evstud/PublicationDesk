@@ -1,8 +1,9 @@
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.contrib.auth.models import User
-from .models import Notice, Response
-from .forms import NoticeForm, ResponseForm
+from .models import Notice, Response,
+from .forms import NoticeForm, ResponseForm, BaseRegisterForm
 
 
 
@@ -40,10 +41,10 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
 
 
-
-
-
-
+class BaseRegisterView(CreateView):
+    model = User
+    form_class = BaseRegisterForm
+    success_url = '/'
 
 #
 # # for email code
