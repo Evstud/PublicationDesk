@@ -27,10 +27,22 @@ class BaseRegisterForm(UserCreationForm):
                   'password1',
                   'password2', ]
 
-    # def __init__(self, *args, **kwargs):
-    #     super(UserCreationForm, self).__init__(*args, **kwargs)
-    #     self.fields['username'].label = 'Имя'
-
+    def __init__(self, *args, **kwargs):
+        super(UserCreationForm, self).__init__(*args, **kwargs)
+        self.fields['username'].label = 'Имя'
+        self.fields['username'].help_text = 'Необходимо заполнить это поле. 150 или менее символов. Допустимы буквы,' \
+                                        ' цифры и @/./+/-/_'
+        self.fields['username'].error_messages = {'required': 'Необходимо заполнить это поле.'}
+        self.fields['email'].label = 'Email'
+        self.fields['email'].error_messages = {'required': 'Необходимо заполнить это поле.'}
+        self.fields['password1'].label = 'Пароль'
+        self.fields['password1'].help_text = '<ul><li>Ваш пароль не может быть схож с персональной информацией.</li>' \
+                                             '<li>Ваш пароль должен содержать не менее 8 символов.</li>' \
+                                             '<li>Ваш пароль не может состоять только из цифр.</li>'
+        self.fields['password1'].error_messages = {'required': 'Необходимо заполнить это поле.'}
+        self.fields['password2'].label = 'Пароль еще раз'
+        self.fields['password2'].help_text = 'Введите пароль еще раз для верификации'
+        self.fields['password2'].error_messages = {'required': 'Необходимо заполнить это поле'}
 
     def clean(self, *args, **kwargs):
         cleaned_data = super().clean()
