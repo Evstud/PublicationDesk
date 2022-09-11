@@ -11,6 +11,11 @@ class NoticeForm(ModelForm):
         model = Notice
         fields = ['noticeTitle', 'noticeText', 'noticeCategory']
 
+    def __init__(self, *args, **kwargs):
+        super(ModelForm, self).__init__(*args, **kwargs)
+        self.fields['noticeTitle'].label = 'Заголовок объявления'
+        self.fields['noticeText'].label = 'Текст объявления'
+        self.fields['noticeCategory'].label = 'Категория объявления'
 
 class ResponseForm(ModelForm):
     class Meta:

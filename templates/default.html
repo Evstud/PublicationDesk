@@ -35,7 +35,15 @@
                 <main>
                     <div class="row no-gutters">
                         <div class="col col-2 col-md-2 sidebar-left">
-                            ggg
+                            <a href="{% url 'main' %}">Главная страница</a>
+                            <br>
+                            <a href="{% url 'notice_create' %}">Создать объявление</a>
+                            <br>
+                            <a href="{% url 'users_page' %}">Страница пользователя</a>
+                            <br>
+                            <a href="{% url 'login' %}">Вход/Выход</a>
+                            <br>
+                            <a href="{% url 'signup' %}">Регистрация</a>
                         </div>
                         <div class="col main">
                             {% block content %}
@@ -44,7 +52,7 @@
                     </div>
                 </main>
             </div>
-            <d class="navbar fixed-bottom">
+            <div class="navbar fixed-bottom">
                 <div class="container container-fluid">
                     <footer>
                            <div>

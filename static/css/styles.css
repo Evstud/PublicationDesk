@@ -1,6 +1,14 @@
-.navbar {
-    font-style: italic;
+.container {
+    font-style: normal;
 }
+
+a {
+    color: black;
+}
+/*
+.sidebar-left {
+    text_decoration: none;
+}*/
 
 .col {
     background: rgba(255, 255, 255, .7);

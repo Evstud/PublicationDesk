@@ -27,7 +27,17 @@ class NoticeDetailView(DetailView):
 class NoticeCreateView(LoginRequiredMixin, CreateView):
     template_name = 'notice_create.html'
     form_class = NoticeForm
-    success_url = ''
+
+    def post(self, request, *args, **kwargs):
+        notice_author = request.user
+        notice = Notice(
+            noticeAuthor = notice_author,
+            noticeTitle = request.POST['noticeTitle'],
+            noticeText = request.POST['noticeText'],
+            noticeCategory = request.POST['noticeCategory'],
+        )
+        notice.save()
+        return redirect('/notice_desk/')
 
 
 class ResponseCreateView(LoginRequiredMixin, CreateView):
@@ -55,20 +65,12 @@ class SignupEndView(FormView):
     #     return User.objects.get(pk=self.request.user.pk)
 
     def post(self, request, *args, **kwargs):
-        print(request.POST)
         user_input_code = int(request.POST.get('code_inp'))
-        print(request.user)
         user_created_code = OneTimeCode.objects.get(user__username=request.POST.get('username'))
-        print(user_created_code)
-        print(type(user_created_code.code))
-        print(type(user_input_code))
         if user_input_code == user_created_code.code:
             current_user = User.objects.get(username=request.POST.get('username'))
-            print(current_user)
             current_user.is_active = True
             current_user.save()
-            print('OK!!!')
             return redirect('/notice_desk/')
         else:
-            print('Not yet!!!')
             return redirect('/notice_desk/signup_end')
