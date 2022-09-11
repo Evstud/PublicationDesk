@@ -48,3 +48,8 @@ class Response(models.Model):
     responseText = models.TextField()
     responseAuthor = models.ForeignKey(User, on_delete=models.CASCADE)
     responseNotice = models.ForeignKey(Notice, on_delete=models.CASCADE)
+
+
+class OneTimeCode(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    code = models.IntegerField()

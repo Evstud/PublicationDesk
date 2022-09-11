@@ -39,11 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'mainApp.apps.MainappConfig',
 
     'ckeditor',
     'ckeditor_uploader',
 
-    'mainApp',
+
 ]
 
 MIDDLEWARE = [
@@ -149,11 +150,13 @@ CKEDITOR_CONFIGS = {
 STATIC_ROOT = 'static_root'
 
 
-LOGIN_URL = 'accounts/login'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/notice_desk/login/'
+LOGIN_REDIRECT_URL = '/notice_desk/'
 
-# for django-registration
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'EvgStud'
+EMAIL_HOST_PASSWORD = 'vsnhxthrgzkkxwmx'
+EMAIL_USE_SSL = True
 
-ACCOUNT_ACTIVATION_DAYS = 1
-
-
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@yandex.ru'

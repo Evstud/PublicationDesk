@@ -1,8 +1,8 @@
-{{% extends 'default.html' %}}
+{% extends 'default.html' %}
 
-{{% block content %}}
+{% block content %}
 <h1>Страница пользователя {{request.user.username}}</h1>
 <p>Некая информация</p>
 
-<button><a href="login/logout/">Выйти</a></button>
-{{% endblock %}}
+<button><a href="{% url 'logout' %}">Выйти</a></button>
+{% endblock %}
