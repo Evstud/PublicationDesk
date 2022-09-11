@@ -63,7 +63,8 @@ class SignupEndView(FormView):
         print(type(user_created_code.code))
         print(type(user_input_code))
         if user_input_code == user_created_code.code:
-            current_user = User.objects.get(username=request.user.username)
+            current_user = User.objects.get(username=request.POST.get('username'))
+            print(current_user)
             current_user.is_active = True
             current_user.save()
             print('OK!!!')

@@ -19,14 +19,24 @@ class ResponseForm(ModelForm):
 
 
 class BaseRegisterForm(UserCreationForm):
-    email = models.EmailField(unique=True)
 
     class Meta:
         model = User
-        fields = ('username',
+        fields = ['username',
                   'email',
                   'password1',
-                  'password2', )
+                  'password2', ]
+
+    # def __init__(self, *args, **kwargs):
+    #     super(UserCreationForm, self).__init__(*args, **kwargs)
+    #     self.fields['username'].label = 'Имя'
+
+
+    def clean(self, *args, **kwargs):
+        cleaned_data = super().clean()
+        if User.objects.filter(email=cleaned_data.get('email')).exists():
+            self.add_error('email', "Эта почта уже зарегистрирована")
+        return cleaned_data
 
 
 class ActivationForm(forms.Form):
