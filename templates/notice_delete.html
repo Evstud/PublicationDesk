@@ -1,0 +1,47 @@
+{% extends 'default.html' %}
+
+{% block title %} Notice delete {% endblock title %}
+
+{% block content %}
+<h2>Вы действительно хотите удалить данное объявление?</h2>
+<table>
+    <tr>
+        <td>
+            Заголовок
+        </td>
+        <td>
+            Дата публикации
+        </td>
+        <td>
+            Превью
+        </td>
+        <td>
+            Автор
+        </td>
+        <td>
+            Категория
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {{ notice.noticeTitle }}
+        </td>
+        <td>
+            {{ notice.noticeDate|date:'d M Y h:m' }}
+        </td>
+        <td>
+            {{ notice.noticeText }}
+        </td>
+        <td>
+            {{ notice.noticeAuthor }}
+        </td>
+        <td>
+            {{ notice.noticeCategory }}
+        </td>
+    </tr>
+</table>
+<form method="POST">
+    {%csrf_token %}
+    <input type="submit" value="подтвердить">
+</form>
+{% endblock content %}

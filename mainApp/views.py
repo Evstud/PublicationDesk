@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView
+from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
@@ -11,6 +11,7 @@ class NoticeList(ListView):
     model = Notice
     template_name = 'notices.html'
     context_object_name = 'notices'
+    queryset = Notice.objects.all()
 
 
 class ResponseList(ListView):
@@ -24,12 +25,21 @@ class NoticeDetailView(DetailView):
     queryset = Notice.objects.all()
 
 
+class NoticeDeleteView(DeleteView):
+    template_name = 'notice_delete.html'
+    queryset = Notice.objects.all()
+    success_url = '/notice_desk/'
+
 class NoticeCreateView(LoginRequiredMixin, CreateView):
     template_name = 'notice_create.html'
     form_class = NoticeForm
 
     def post(self, request, *args, **kwargs):
-        notice_author = request.user
+        author_req = request.user
+        print(author_req.id)
+        print(User.objects.get(id=author_req.id))
+        notice_author = User.objects.get(id=author_req.id)
+        # notice_author = request.user
         notice = Notice(
             noticeAuthor = notice_author,
             noticeTitle = request.POST['noticeTitle'],

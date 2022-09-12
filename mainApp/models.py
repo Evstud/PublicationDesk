@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextFormField, CKEditorWidget, RichTextField
 
+
+# class Author(models.Model):
+#     authorUser=models.OneToOneField(User, on_delete = models.CASCADE)
 class Notice(models.Model):
     tanks = 'TA'
     heals = 'HE'
@@ -38,7 +41,8 @@ class Notice(models.Model):
         )],
     )
     noticeCategory = models.CharField(max_length=2, choices=CATEGORIES, default=tanks)
-    noticeAuthor = models.OneToOneField(User, on_delete=models.CASCADE)
+    noticeAuthor = models.ForeignKey(User, on_delete=models.CASCADE)
+    noticeDate = models.DateTimeField(auto_now_add=True)
     # ck1 = RichTextField(blank=True, null=True)
     # ck2 = RichTextFormField()
     # ck3 = CKEditorWidget()
