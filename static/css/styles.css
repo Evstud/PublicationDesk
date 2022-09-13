@@ -1,27 +1,24 @@
-.container {
-    font-style: normal;
-}
-
 a {
     color: black;
 }
-/*
-.sidebar-left {
-    text_decoration: none;
-}*/
+
+.navbar_name, .menu_link {
+    text-decoration: none;
+}
 
 .col {
     background: rgba(255, 255, 255, .7);
     margin: 0 10px 0 10px;
-}
+ }
 
 .container {
+    font-style: normal;
     background: rgba(255, 255, 255, .2);
     opacity: 0.9;
     margin: 0 0 0 0;
     border: 0 0 0 0;
     min-width: 100%;
-}
+    }
 
 div {
     margin: 0 0 0 0;
@@ -59,11 +56,15 @@ div {
     color: black;
 }
 
+.container_navbar_name, .cont_main_page, .cont_publication_create, .cont_enter {
+    text-align: center;
+}
+/*
 .menu_link {
     color: black;
-}
+}*/
 
-@media (min-width: 576px) {
+@media (min-width: 100px) {
     body {
         background-image: url("../images/Morrowind2.jpg");     
     }

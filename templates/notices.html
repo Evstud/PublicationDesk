@@ -10,46 +10,19 @@ Notices
     <hr>
     {% if notices %}
     <table>
-        <tr>
-            <td>
-                Заголовок
-            </td>
-            <td>
-                Дата публикации
-            </td>
-            <td>
-                Превью
-            </td>
-            <td>
-                Автор
-            </td>
-            <td>
-                Категория
-            </td>
-        </tr>
-    {% for notice in notices %}
+        {% for notice in notices %}
         <tr>
             <td>
                 <a href="{% url 'notice_detail' notice.id %}">{{ notice.noticeTitle }}</a>
-                <a href="{% url 'notice_delete' notice.id %}"><u> Удалить</u></a>
             </td>
             <td>
-                {{ notice.noticeDate|date:'d M Y h:m' }}
-            </td>
-            <td>
-                {{ notice.noticeText }}
-            </td>
-            <td>
-                {{ notice.noticeAuthor.username }}
-            </td>
-            <td>
-                {{ notice.noticeCategory }}
+                {{ notice.noticeText|safe }}
             </td>
         </tr>
-    {% endfor %}
+        {% endfor %}
     </table>
     {% else %} <!-- Если объявлений нет, то говорим что объявлений нет ;) -->
-    <h2>Объявлений!</h2>
+    <h2>Объявлений нет!</h2>
     {% endif %}
 <br>
 

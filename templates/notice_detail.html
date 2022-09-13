@@ -1,4 +1,4 @@
-{% extends 'default.html %}
+{% extends 'default.html' %}
 
 {% block title %}
 Объявление
@@ -6,33 +6,47 @@
 
 {% block content %}
 <table>
-    <tr>
-        <td>
-            Заголовок
-        </td>
-        <td>
-            Текст
-        </td>
-        <td>
-            Категория
-        </td>
-        <td>
-            Автор
-        </td>
-    </tr>
-    <tr>
-        <td>
-
-        </td>
-        <td>
-
-        </td>
-        <td>
-
-        </td>
-        <td>
-
-        </td>
-    </tr>
-</table>
+        <tr>
+            <td>
+                Заголовок
+            </td>
+            <td>
+                Дата публикации
+            </td>
+            <td>
+                Превью
+            </td>
+            <td>
+                Автор
+            </td>
+            <td>
+                Категория
+            </td>
+            <td>
+                Удаление
+            </td>
+        </tr>
+    {% for notice in notices %}
+        <tr>
+            <td>
+                <a href="{% url 'notice_detail' notice.id %}">{{ notice.noticeTitle }}</a>
+            </td>
+            <td>
+                {{ notice.noticeDate|date:'d M Y h:m' }}
+            </td>
+            <td>
+                {{ notice.noticeCategory }}
+            </td>
+            <td>
+                {{ notice.noticeAuthor.username }}
+            </td>
+            <td>
+                {{ notice.noticeText|safe }}
+            </td>
+            <td>
+                <a href="{% url 'notice_delete' notice.id %}"><u> Удалить</u></a>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
 {% endblock content %}
