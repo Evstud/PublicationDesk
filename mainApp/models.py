@@ -52,6 +52,7 @@ class Response(models.Model):
     responseText = models.TextField()
     responseAuthor = models.ForeignKey(User, on_delete=models.CASCADE)
     responseNotice = models.ForeignKey(Notice, on_delete=models.CASCADE)
+    responseAdmission = models.BooleanField(default=False)
 
 
 class OneTimeCode(models.Model):

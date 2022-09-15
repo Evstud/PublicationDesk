@@ -1,4 +1,4 @@
-{% extends 'default.html %}
+{% extends 'default.html' %}
 
 {% block title %}
 Добавить отклик
@@ -7,7 +7,7 @@
 {% block content %}
 <form method="POST">
     {% csrf_token %}
-    {{}}
+    {{ form.as_p }}
     <input type="submit" value="Добавить отклик">
 </form>
 {% endblock content %}

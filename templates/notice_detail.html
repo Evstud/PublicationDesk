@@ -14,19 +14,18 @@
                 Дата публикации
             </td>
             <td>
-                Превью
+                Категория
             </td>
             <td>
                 Автор
             </td>
             <td>
-                Категория
+                Содержание
             </td>
             <td>
                 Удаление
             </td>
         </tr>
-    {% for notice in notices %}
         <tr>
             <td>
                 <a href="{% url 'notice_detail' notice.id %}">{{ notice.noticeTitle }}</a>
@@ -44,9 +43,10 @@
                 {{ notice.noticeText|safe }}
             </td>
             <td>
+                <a href="{% url 'notice_update' notice.id %}"><u>Редактировать</u></a>
+                <br>
                 <a href="{% url 'notice_delete' notice.id %}"><u> Удалить</u></a>
             </td>
         </tr>
-    {% endfor %}
     </table>
 {% endblock content %}

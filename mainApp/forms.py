@@ -22,6 +22,10 @@ class ResponseForm(ModelForm):
         model = Response
         fields = ['responseText']
 
+    def __init__(self, *args, **kwargs):
+        super(ResponseForm, self).__init__(*args, **kwargs)
+        self.fields['responseText'].label = 'Текст отклика'
+
 
 class BaseRegisterForm(UserCreationForm):
 

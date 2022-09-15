@@ -160,3 +160,5 @@ EMAIL_HOST_PASSWORD = 'vsnhxthrgzkkxwmx'
 EMAIL_USE_SSL = True
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@yandex.ru'
+
+

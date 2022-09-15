@@ -18,7 +18,17 @@ Notices
             <td>
                 {{ notice.noticeText|safe }}
             </td>
+            <td>
+                <a href="{% url 'response_create' notice.id %}"f><u>Комментировать</u></a>
+                <br>
+                {% if author_user.id == notice.noticeAuthor_id %}
+                <a href="{% url 'notice_update' notice.id %}"><u>Редактировать</u></a>
+                <br>
+                <a href="{% url 'notice_delete' notice.id %}"><u>Удалить</u></a>
+                {% endif %}
+            </td>
         </tr>
+        <br>
         {% endfor %}
     </table>
     {% else %} <!-- Если объявлений нет, то говорим что объявлений нет ;) -->

@@ -1,14 +1,16 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
-from .views import NoticeList, ResponseList, ResponseCreateView, NoticeCreateView, NoticeDetailView, BaseRegisterView, IndexView, SignupEndView, NoticeDeleteView
+from .views import NoticeList, ResponseList, ResponseCreateView, NoticeCreateView, NoticeDetailView, BaseRegisterView, IndexView, SignupEndView, NoticeDeleteView, NoticeUpdateView, ResponseDetailView
 
 urlpatterns = [
     path('', NoticeList.as_view(), name='main'),
     path('responses/', ResponseList.as_view(), name='responses'),
-    path('response_create/', ResponseCreateView.as_view(), name='response_create'),
+    path('<int:pk>/response_create/', ResponseCreateView.as_view(), name='response_create'),
+    path('<int:pk>/response_created/', ResponseDetailView.as_view(), name='response_created'),
     path('notice_create/', NoticeCreateView.as_view(), name='notice_create'),
-    path('<int:pk>_notice_detail/', NoticeDetailView.as_view(), name='notice_detail'),
-    path('<int:pk>_notice_delete/', NoticeDeleteView.as_view(), name='notice_delete'),
+    path('<int:pk>/notice_update/', NoticeUpdateView.as_view(), name='notice_update'),
+    path('<int:pk>/notice_detail/', NoticeDetailView.as_view(), name='notice_detail'),
+    path('<int:pk>/notice_delete/', NoticeDeleteView.as_view(), name='notice_delete'),
     path('login/', LoginView.as_view(template_name='login/login.html'), name='login'),
     path('users_page/', IndexView.as_view(template_name='login/users_page.html'), name='users_page'),
     path('logout/', LogoutView.as_view(template_name='login/logout.html'), name='logout'),

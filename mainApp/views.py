@@ -1,5 +1,5 @@
-from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView, DeleteView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
 from .models import Notice, Response, OneTimeCode
@@ -13,19 +13,22 @@ class NoticeList(ListView):
     context_object_name = 'notices'
     queryset = Notice.objects.all()
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['post_categories'] = PostCategory.objects.all()
+        context['author_user'] = self.request.user
+        return context
 
-class ResponseList(ListView):
-    model = Response
-    template_name = 'responses.html'
-    context_object_name = 'responses'
 
 
 class NoticeDetailView(DetailView):
     template_name = 'notice_detail.html'
+    context_object_name = 'notice'
     queryset = Notice.objects.all()
 
 
-class NoticeDeleteView(DeleteView):
+class NoticeDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+    permission_required = ('mainApp.delete_notice',)
     template_name = 'notice_delete.html'
     queryset = Notice.objects.all()
     success_url = '/notice_desk/'
@@ -36,10 +39,7 @@ class NoticeCreateView(LoginRequiredMixin, CreateView):
 
     def post(self, request, *args, **kwargs):
         author_req = request.user
-        print(author_req.id)
-        print(User.objects.get(id=author_req.id))
         notice_author = User.objects.get(id=author_req.id)
-        # notice_author = request.user
         notice = Notice(
             noticeAuthor = notice_author,
             noticeTitle = request.POST['noticeTitle'],
@@ -50,10 +50,49 @@ class NoticeCreateView(LoginRequiredMixin, CreateView):
         return redirect('/notice_desk/')
 
 
+class NoticeUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+    permission_required = ('mainApp.change_notice', )
+    template_name = 'notice_create.html'
+    form_class = NoticeForm
+    success_url = '/notice_desk/'
+
+    def get_object(self, **kwargs):
+        id = self.kwargs.get('pk')
+        return Notice.objects.get(pk=id)
+
+
+
 class ResponseCreateView(LoginRequiredMixin, CreateView):
     template_name = 'response_create.html'
     form_class = ResponseForm
-    success_url = ''
+
+    def post(self, request, *args, **kwargs):
+        response_author = request.user
+        response_notice = Notice.objects.get(id=request.resolver_match.kwargs.get('pk'))
+        response = Response(
+            responseAuthor = response_author,
+            responseNotice = response_notice,
+            responseText = request.POST['responseText'],
+        )
+        response.save()
+        return redirect('response_created', pk=response.id)
+
+
+class ResponseDetailView(LoginRequiredMixin, DetailView):
+    template_name = 'response_created.html'
+    context_object_name = 'response'
+    queryset = Response.objects.all()
+
+    #
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['response_notice'] = Notice.objects.get(id=Response.objects.get)
+    #     return context
+
+class ResponseList(ListView):
+    model = Response
+    template_name = 'responses.html'
+    context_object_name = 'responses'
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
