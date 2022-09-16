@@ -2,8 +2,13 @@ from django.views.generic import ListView, DetailView, CreateView, TemplateView,
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+
 from .models import Notice, Response, OneTimeCode
 from .forms import NoticeForm, ResponseForm, BaseRegisterForm, ActivationForm
+
 
 
 
@@ -11,14 +16,14 @@ class NoticeList(ListView):
     model = Notice
     template_name = 'notices.html'
     context_object_name = 'notices'
-    queryset = Notice.objects.all()
+    queryset = Notice.objects.all().order_by('-noticeDate')
+    paginate_by = 2
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context['post_categories'] = PostCategory.objects.all()
         context['author_user'] = self.request.user
+        print(self.request.user)
         return context
-
 
 
 class NoticeDetailView(DetailView):
@@ -32,6 +37,7 @@ class NoticeDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'notice_delete.html'
     queryset = Notice.objects.all()
     success_url = '/notice_desk/'
+
 
 class NoticeCreateView(LoginRequiredMixin, CreateView):
     template_name = 'notice_create.html'
@@ -61,7 +67,6 @@ class NoticeUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
         return Notice.objects.get(pk=id)
 
 
-
 class ResponseCreateView(LoginRequiredMixin, CreateView):
     template_name = 'response_create.html'
     form_class = ResponseForm
@@ -78,7 +83,7 @@ class ResponseCreateView(LoginRequiredMixin, CreateView):
         return redirect('response_created', pk=response.id)
 
 
-class ResponseDetailView(LoginRequiredMixin, DetailView):
+class ResponseCreatedView(LoginRequiredMixin, DetailView):
     template_name = 'response_created.html'
     context_object_name = 'response'
     queryset = Response.objects.all()
@@ -89,11 +94,43 @@ class ResponseDetailView(LoginRequiredMixin, DetailView):
     #     context['response_notice'] = Notice.objects.get(id=Response.objects.get)
     #     return context
 
+
 class ResponseList(ListView):
     model = Response
     template_name = 'responses.html'
     context_object_name = 'responses'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['author_user'] = self.request.user
+
+        return context
+
+@login_required
+def admit_response(request, pk):
+    user = request.user
+    response_to_admit = Response.objects.get(id=pk)
+    response_to_admit.responseAdmission = True
+    response_to_admit.save()
+
+
+    html_content = render_to_string(
+            'response_admitted.html',
+            {
+                'username': response_to_admit.responseAuthor.username,
+                'response': response_to_admit,
+            }
+        )
+
+    msg = EmailMultiAlternatives(
+            subject=f'Отклик принят',
+            body='Hi!',
+            from_email='EvgStud@yandex.ru',
+            to=[response_to_admit.responseAuthor.email]
+        )
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+    return redirect('/notice_desk/users_page/responses/')
 
 class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'users_page.html'

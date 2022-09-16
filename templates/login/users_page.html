@@ -3,6 +3,8 @@
 {% block content %}
 <h1>Страница пользователя {{request.user.username}}</h1>
 <p>Некая информация</p>
-
+<a href="{% url 'responses' %}">Отклики на объявления</a>
+<br>
+<br>
 <button><a href="{% url 'logout' %}">Выйти</a></button>
 {% endblock %}

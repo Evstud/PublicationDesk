@@ -1,10 +1,54 @@
 {% extends 'default.html' %}
 
-{% block title %}
-Responses
-{% endblock title %}
+{% block title %} Responses list {% endblock title %}
 
 {% block content %}
-<h1>Все отклики</h1>
-{{ responses }}
+<h2>Все отклики</h2>
+{% if responses %}
+<table>
+    <tr>
+        <td>
+            Отклик на:
+        </td>
+        <td>
+            Текст отклика:
+        </td>
+        <td>
+            Автор отклика:
+        </td>
+        <td>
+            Принять отклик
+        </td>
+        <td></td>
+        <td>
+
+        </td>
+    </tr>
+    {% for response in responses %}
+    {% if author_user.id == response.responseNotice.noticeAuthor_id %}
+    <tr>
+        <td>
+            {{ response.responseNotice.noticeTitle }}
+        </td>
+        <td>
+            {{ response.responseText }}
+        </td>
+        <td>
+            {{ response.responseAuthor }}
+        </td>
+        <td>
+            {% if response.responseAdmission == False %}
+             <button><a href="{% url 'admit_response' response.id %}">Принять отклик</a></button>
+            {% else %}
+            Отклик принят
+            {% endif %}
+        </td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+{% endif %}
+<br>
+
+<a href="{% url 'main' %}">На главную</a>
 {% endblock content %}
