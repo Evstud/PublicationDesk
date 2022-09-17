@@ -46,6 +46,8 @@ class Notice(models.Model):
     # ck1 = RichTextField(blank=True, null=True)
     # ck2 = RichTextFormField()
     # ck3 = CKEditorWidget()
+    def __str__(self):
+        return f'{self.noticeTitle}'
 
 
 class Response(models.Model):

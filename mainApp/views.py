@@ -8,6 +8,7 @@ from django.core.mail import EmailMultiAlternatives
 
 from .models import Notice, Response, OneTimeCode
 from .forms import NoticeForm, ResponseForm, BaseRegisterForm, ActivationForm
+from .filters import ResponseFilter
 
 
 
@@ -99,12 +100,30 @@ class ResponseList(ListView):
     model = Response
     template_name = 'responses.html'
     context_object_name = 'responses'
+    # queryset = Response.objects.all().filter(responseNotice__noticeAuthor=self.request.user)
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['author_user'] = self.request.user
-
+        author_qs = self.get_queryset().filter(responseNotice__noticeAuthor=self.request.user)
+        req_var = self.request.GET
+        # print(req_var)
+        print(self.get_template_names())
+        print(Notice.objects.all().filter(noticeAuthor=self.request.user))
+        users_notices = Notice.objects.all().filter(noticeAuthor=self.request.user)
+        # if self.request.GET in users_notices:
+        context['filter'] = ResponseFilter(self.request.GET, queryset=author_qs)
+        # else:
+        # context['error_mess'] = 'Это объявление другого автора'
         return context
+
+
+class ResponseDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    permission_required = ('mainApp.delete_response',)
+    template_name = 'response_delete.html'
+    queryset = Response.objects.all()
+    success_url = '/notice_desk/users_page/responses/'
 
 @login_required
 def admit_response(request, pk):
@@ -132,9 +151,11 @@ def admit_response(request, pk):
     msg.send()
     return redirect('/notice_desk/users_page/responses/')
 
+
 class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'users_page.html'
     success_url = 'users_page.html'
+
 
 class BaseRegisterView(CreateView):
     model = User

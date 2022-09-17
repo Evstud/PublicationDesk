@@ -3,6 +3,11 @@
 {% block title %} Responses list {% endblock title %}
 
 {% block content %}
+<form method="GET">
+    {{ filter.form }}
+    <input type="submit" value="Найти">
+</form>
+{{ error_mess }}
 <h2>Все отклики</h2>
 {% if responses %}
 <table>
@@ -19,12 +24,11 @@
         <td>
             Принять отклик
         </td>
-        <td></td>
         <td>
-
+            Удалить отклик
         </td>
     </tr>
-    {% for response in responses %}
+    {% for response in filter.qs %}
     {% if author_user.id == response.responseNotice.noticeAuthor_id %}
     <tr>
         <td>
@@ -42,6 +46,9 @@
             {% else %}
             Отклик принят
             {% endif %}
+        </td>
+        <td>
+            <button><a href="{% url 'response_delete' response.id %}">Удалить отклик</a></button>
         </td>
     </tr>
     {% endif %}

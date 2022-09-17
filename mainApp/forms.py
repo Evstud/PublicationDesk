@@ -17,6 +17,7 @@ class NoticeForm(ModelForm):
         self.fields['noticeText'].label = 'Текст объявления'
         self.fields['noticeCategory'].label = 'Категория объявления'
 
+
 class ResponseForm(ModelForm):
     class Meta:
         model = Response

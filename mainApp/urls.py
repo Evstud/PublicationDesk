@@ -1,12 +1,13 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
-from .views import NoticeList, ResponseList, ResponseCreateView, NoticeCreateView, NoticeDetailView, BaseRegisterView, IndexView, SignupEndView, NoticeDeleteView, NoticeUpdateView, ResponseCreatedView, admit_response
+from .views import NoticeList, ResponseList, ResponseCreateView, NoticeCreateView, NoticeDetailView, BaseRegisterView, IndexView, SignupEndView, NoticeDeleteView, NoticeUpdateView, ResponseCreatedView, admit_response, ResponseDeleteView
 
 urlpatterns = [
     path('', NoticeList.as_view(), name='main'),
     path('users_page/responses/', ResponseList.as_view(), name='responses'),
     path('<int:pk>/response_create/', ResponseCreateView.as_view(), name='response_create'),
     path('<int:pk>/response_created/', ResponseCreatedView.as_view(), name='response_created'),
+    path('<int:pk>/response_delete/', ResponseDeleteView.as_view(), name='response_delete'),
     path('users_page/responses/<int:pk>/admit_response/', admit_response, name='admit_response'),
     path('notice_create/', NoticeCreateView.as_view(), name='notice_create'),
     path('<int:pk>/notice_update/', NoticeUpdateView.as_view(), name='notice_update'),
