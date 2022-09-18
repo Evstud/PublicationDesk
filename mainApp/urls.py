@@ -1,6 +1,8 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
-from .views import NoticeList, ResponseList, ResponseCreateView, NoticeCreateView, NoticeDetailView, BaseRegisterView, IndexView, SignupEndView, NoticeDeleteView, NoticeUpdateView, ResponseCreatedView, admit_response, ResponseDeleteView
+from .views import NoticeList, ResponseList, ResponseCreateView, NoticeCreateView, NoticeDetailView, BaseRegisterView, \
+    IndexView, SignupEndView, NoticeDeleteView, NoticeUpdateView, ResponseCreatedView, admit_response, \
+    ResponseDeleteView, send_news
 
 urlpatterns = [
     path('', NoticeList.as_view(), name='main'),
@@ -18,4 +20,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(template_name='login/logout.html'), name='logout'),
     path('signup/', BaseRegisterView.as_view(template_name='login/signup.html'), name='signup'),
     path('signup_end/', SignupEndView.as_view(template_name='login/signup_end.html'), name='signup_end'),
+    path('users_page/send_news/', send_news, name='send_news'),
 ]

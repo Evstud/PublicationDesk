@@ -59,10 +59,6 @@ div {
 .container_navbar_name, .cont_main_page, .cont_publication_create, .cont_enter {
     text-align: center;
 }
-/*
-.menu_link {
-    color: black;
-}*/
 
 @media (min-width: 100px) {
     body {

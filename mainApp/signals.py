@@ -32,11 +32,9 @@ def response_created_message(sender, instance, created, **kwargs):
         pass
 
 
-
 @receiver(post_save, sender=User)
 def reg_continue(sender, instance, created, **kwargs):
     if created:
-
         instance.is_active = False
         instance.save()
         reg_code = OneTimeCode.objects.create(code=random.randint(10000, 99999), user=instance)

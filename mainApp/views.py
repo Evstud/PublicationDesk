@@ -5,12 +5,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
+from datetime import date, timedelta
 
 from .models import Notice, Response, OneTimeCode
 from .forms import NoticeForm, ResponseForm, BaseRegisterForm, ActivationForm
 from .filters import ResponseFilter
-
-
 
 
 class NoticeList(ListView):
@@ -89,12 +88,6 @@ class ResponseCreatedView(LoginRequiredMixin, DetailView):
     context_object_name = 'response'
     queryset = Response.objects.all()
 
-    #
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['response_notice'] = Notice.objects.get(id=Response.objects.get)
-    #     return context
-
 
 class ResponseList(ListView):
     model = Response
@@ -102,20 +95,19 @@ class ResponseList(ListView):
     context_object_name = 'responses'
     # queryset = Response.objects.all().filter(responseNotice__noticeAuthor=self.request.user)
 
+    def notices_for_filter(request):
+        print(request)
+        notice_author = request.user
+        return notice_author.notice_set.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['author_user'] = self.request.user
-        author_qs = self.get_queryset().filter(responseNotice__noticeAuthor=self.request.user)
-        req_var = self.request.GET
-        # print(req_var)
-        print(self.get_template_names())
-        print(Notice.objects.all().filter(noticeAuthor=self.request.user))
-        users_notices = Notice.objects.all().filter(noticeAuthor=self.request.user)
-        # if self.request.GET in users_notices:
-        context['filter'] = ResponseFilter(self.request.GET, queryset=author_qs)
-        # else:
-        # context['error_mess'] = 'Это объявление другого автора'
+        context['filter'] = ResponseFilter(self.request.GET, queryset=self.get_queryset())
+        context['copyright'] = 'Невозможно отобразить отклики на объявления, опубликованные другим автором'
+        if self.request.GET:
+            notice = Notice.objects.all().get(id=self.request.GET['responseNotice'])
+            context['noticeAuthorCon'] = notice.noticeAuthor
         return context
 
 
@@ -125,13 +117,42 @@ class ResponseDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
     queryset = Response.objects.all()
     success_url = '/notice_desk/users_page/responses/'
 
+
+def email_sender(list_of_readers, list_of_notices):
+   for subscriber in list_of_readers:
+        html_content = render_to_string(
+            'notices_one_week.html',
+            {
+                'notices': list_of_notices,
+                'subscribername': subscriber.username,
+            }
+        )
+
+        msg = EmailMultiAlternatives(
+            subject=f'News by week',
+            body='News',
+            from_email='EvgStud@yandex.ru',
+            to=[subscriber.email]
+        )
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
+
+def send_news(*args, **kwargs):
+    startdate = date.today()
+    enddate = startdate - timedelta(days=7)
+    list_of_notices = Notice.objects.filter(noticeDate__range=[enddate, startdate])
+    list_of_readers = User.objects.all()
+    email_sender(list_of_readers, list_of_notices)
+    return redirect('/notice_desk/')
+
+
 @login_required
 def admit_response(request, pk):
     user = request.user
     response_to_admit = Response.objects.get(id=pk)
     response_to_admit.responseAdmission = True
     response_to_admit.save()
-
 
     html_content = render_to_string(
             'response_admitted.html',
@@ -168,9 +189,6 @@ class SignupEndView(FormView):
     form_class = ActivationForm
     success_url = '/notice_desk/'
 
-    # def get_object(self):
-    #     return User.objects.get(pk=self.request.user.pk)
-
     def post(self, request, *args, **kwargs):
         user_input_code = int(request.POST.get('code_inp'))
         user_created_code = OneTimeCode.objects.get(user__username=request.POST.get('username'))
@@ -181,3 +199,6 @@ class SignupEndView(FormView):
             return redirect('/notice_desk/')
         else:
             return redirect('/notice_desk/signup_end')
+
+
+

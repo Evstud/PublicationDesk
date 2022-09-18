@@ -7,8 +7,7 @@
     {{ filter.form }}
     <input type="submit" value="Найти">
 </form>
-{{ error_mess }}
-<h2>Все отклики</h2>
+<h2>Отклики</h2>
 {% if responses %}
 <table>
     <tr>
@@ -53,6 +52,11 @@
     </tr>
     {% endif %}
     {% endfor %}
+    <tr>
+        {% if noticeAuthorCon != author_user %}
+            {{ copyright }}
+        {% endif %}
+    </tr>
 </table>
 {% endif %}
 <br>
