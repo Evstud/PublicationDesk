@@ -42,6 +42,9 @@ class Notice(models.Model):
     noticeAuthor = models.ForeignKey(User, on_delete=models.CASCADE)
     noticeDate = models.DateTimeField(auto_now_add=True)
 
+    def get_absolute_url(self):
+        return f'http://127.0.0.1:8000/notice_desk/{self.id}/notice_detail'
+
     def __str__(self):
         return f'{self.noticeTitle}'
 
