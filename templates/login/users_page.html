@@ -6,7 +6,14 @@
 <br>
 <br>
 {% if request.user.is_superuser %}
-<a href="{% url 'send_news' %}">Отправить еженедельную рассылку</a>
+<form action="{% url 'send_news' %}" method="POST">
+    {% csrf_token %}
+<!--<a href="{% url 'send_news' %}">Отправить еженедельную рассылку</a>-->
+    <label for="number">Рассылка объявлений за последние</label>
+    <input type="number" id="number" name="Num_of_days" min="0" max="10000">
+    дней.
+    <input type="submit" value="Отправить рассылку">
+</form>
 {% endif %}
 <br>
 <br>

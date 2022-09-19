@@ -1,3 +1,4 @@
+import requests
 from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView, DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect
@@ -22,7 +23,6 @@ class NoticeList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['author_user'] = self.request.user
-        print(self.request.user)
         return context
 
 
@@ -96,7 +96,6 @@ class ResponseList(ListView):
     # queryset = Response.objects.all().filter(responseNotice__noticeAuthor=self.request.user)
 
     def notices_for_filter(request):
-        print(request)
         notice_author = request.user
         return notice_author.notice_set.all()
 
@@ -138,9 +137,10 @@ def email_sender(list_of_readers, list_of_notices):
         msg.send()
 
 
-def send_news(*args, **kwargs):
+def send_news(request, *args, **kwargs):
+    num_of_days = request.POST['Num_of_days']
     startdate = date.today()
-    enddate = startdate - timedelta(days=7)
+    enddate = startdate - timedelta(days=int(num_of_days))
     list_of_notices = Notice.objects.filter(noticeDate__range=[enddate, startdate])
     list_of_readers = User.objects.all()
     email_sender(list_of_readers, list_of_notices)
